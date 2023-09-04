@@ -100,8 +100,8 @@ public class Drop extends ApplicationAdapter {
             camera.unproject(touchPos);
             bucket.x = touchPos.x - 64 / 2;
         }
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 400 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 400 * Gdx.graphics.getDeltaTime();
 
         // make sure the bucket stays within the screen bounds
         if(bucket.x < 0) bucket.x = 0;
