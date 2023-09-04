@@ -1,6 +1,8 @@
 package com.mygdx.drop;
 
+import java.awt.*;
 import java.util.Iterator;
+import java.util.Timer;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -9,7 +11,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -27,9 +31,21 @@ public class Drop extends ApplicationAdapter {
     private Rectangle bucket;
     private Array<Rectangle> raindrops;
     private long lastDropTime;
-
+    private BitmapFont font;
+    private BitmapFont font2;
+    private FreeTypeFontGenerator generator;
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    private String word = "Hello";
+    private long wordTime;
     @Override
     public void create() {
+        // load the text
+        font = new BitmapFont();
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
+        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        font2 = generator.generateFont(parameter);
+
         // load the images for the droplet and the bucket, 64x64 pixels each
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
         bucketImage = new Texture(Gdx.files.internal("bucket.png"));
@@ -91,17 +107,24 @@ public class Drop extends ApplicationAdapter {
         for(Rectangle raindrop: raindrops) {
             batch.draw(dropImage, raindrop.x, raindrop.y);
         }
+        /*
+        font.draw(batch, "Hello World!", 400, 240);
+        font.getData().setScale(5f);
+         */
+        font2.draw(batch, word, 400, 240);
         batch.end();
 
+
         // process user input
+        //word = "Hello";
         if(Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             bucket.x = touchPos.x - 64 / 2;
         }
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 400 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 400 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 500 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 500 * Gdx.graphics.getDeltaTime();
 
         // make sure the bucket stays within the screen bounds
         if(bucket.x < 0) bucket.x = 0;
@@ -118,9 +141,14 @@ public class Drop extends ApplicationAdapter {
             raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
             if(raindrop.y + 64 < 0) iter.remove();
             if(raindrop.overlaps(bucket)) {
+                wordTime = TimeUtils.nanoTime();
+                word = "Bruh";
                 dropSound.play();
                 iter.remove();
             }
+        }
+        if (TimeUtils.nanoTime() - wordTime > 100000000) {
+            word = "Hello";
         }
     }
 
@@ -132,5 +160,8 @@ public class Drop extends ApplicationAdapter {
         dropSound.dispose();
         rainMusic.dispose();
         batch.dispose();
+        //font.dispose();
+        generator.dispose();
+        font2.dispose();
     }
 }
