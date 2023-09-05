@@ -113,7 +113,7 @@ public class Drop extends ApplicationAdapter {
         // all drops
         batch.begin();
         batch.draw(bucketImage, bucket.x, bucket.y);
-        for(Rectangle raindrop: raindrops) {
+        for (Rectangle raindrop : raindrops) {
             batch.draw(dropImage, raindrop.x, raindrop.y);
         }
         /*
@@ -126,21 +126,21 @@ public class Drop extends ApplicationAdapter {
 
         // process user input
         //word = "Hello";
-        if(Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             bucket.x = touchPos.x - 64 / 2;
         }
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 500 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 500 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 500 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 500 * Gdx.graphics.getDeltaTime();
 
         // make sure the bucket stays within the screen bounds
-        if(bucket.x < 0) bucket.x = 0;
-        if(bucket.x > 800 - 64) bucket.x = 800 - 64;
+        if (bucket.x < 0) bucket.x = 0;
+        if (bucket.x > 800 - 64) bucket.x = 800 - 64;
 
         // check if we need to create a new raindrop
-        if(TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
         // move the raindrops, remove any that are beneath the bottom edge of
         // the screen or that hit the bucket. In the latter case we play back
@@ -148,16 +148,17 @@ public class Drop extends ApplicationAdapter {
         for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
             Rectangle raindrop = iter.next();
             raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if(raindrop.y + 64 < 0) {
+            if (raindrop.y + 64 < 0) {
                 iter.remove();
+                paused = true;
             }
-            if(raindrop.overlaps(bucket)) {
+            if (raindrop.overlaps(bucket)) {
                 //wordTime = TimeUtils.nanoTime();
                 //word = "Bruh";
                 dropSound.play();
                 iter.remove();
                 score += 1;
-                word = ""+score;
+                word = "" + score;
             }
         }
         /*
@@ -165,10 +166,10 @@ public class Drop extends ApplicationAdapter {
             word = "Hello";
         }
         */
+        if(!paused) {
+            Gdx.graphics.requestRendering();
+        }
     }
-
-
-    public void
 
     @Override
     public void dispose() {
