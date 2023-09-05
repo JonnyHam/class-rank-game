@@ -35,10 +35,17 @@ public class Drop extends ApplicationAdapter {
     private BitmapFont font2;
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
-    private String word = "Hello";
-    private long wordTime;
+    //private String word = "Hello";
+    private String word = "0";
+    private int score = 0;
+    //private long wordTime;
     @Override
     public void create() {
+
+        //for pausing and resuming
+        Gdx.graphics.setContinuousRendering(false);
+        Gdx.graphics.requestRendering();
+
         // load the text
         font = new BitmapFont();
         generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
@@ -84,6 +91,8 @@ public class Drop extends ApplicationAdapter {
         raindrops.add(raindrop);
         lastDropTime = TimeUtils.nanoTime();
     }
+
+    public boolean paused = false;
 
     @Override
     public void render() {
@@ -139,18 +148,27 @@ public class Drop extends ApplicationAdapter {
         for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
             Rectangle raindrop = iter.next();
             raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if(raindrop.y + 64 < 0) iter.remove();
-            if(raindrop.overlaps(bucket)) {
-                wordTime = TimeUtils.nanoTime();
-                word = "Bruh";
-                dropSound.play();
+            if(raindrop.y + 64 < 0) {
                 iter.remove();
             }
+            if(raindrop.overlaps(bucket)) {
+                //wordTime = TimeUtils.nanoTime();
+                //word = "Bruh";
+                dropSound.play();
+                iter.remove();
+                score += 1;
+                word = ""+score;
+            }
         }
+        /*
         if (TimeUtils.nanoTime() - wordTime > 100000000) {
             word = "Hello";
         }
+        */
     }
+
+
+    public void
 
     @Override
     public void dispose() {
