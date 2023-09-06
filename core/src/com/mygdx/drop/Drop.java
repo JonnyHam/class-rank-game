@@ -96,80 +96,83 @@ public class Drop extends ApplicationAdapter {
 
     @Override
     public void render() {
-        // clear the screen with a dark blue color. The
-        // arguments to clear are the red, green
-        // blue and alpha component in the range [0,1]
-        // of the color to be used to clear the screen.
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        if(!paused) {
+            Gdx.graphics.requestRendering();
+            // clear the screen with a dark blue color. The
+            // arguments to clear are the red, green
+            // blue and alpha component in the range [0,1]
+            // of the color to be used to clear the screen.
+            ScreenUtils.clear(0, 0, 0.2f, 1);
 
-        // tell the camera to update its matrices.
-        camera.update();
+            // tell the camera to update its matrices.
+            camera.update();
 
-        // tell the SpriteBatch to render in the
-        // coordinate system specified by the camera.
-        batch.setProjectionMatrix(camera.combined);
+            // tell the SpriteBatch to render in the
+            // coordinate system specified by the camera.
+            batch.setProjectionMatrix(camera.combined);
 
-        // begin a new batch and draw the bucket and
-        // all drops
-        batch.begin();
-        batch.draw(bucketImage, bucket.x, bucket.y);
-        for (Rectangle raindrop : raindrops) {
-            batch.draw(dropImage, raindrop.x, raindrop.y);
-        }
+            // begin a new batch and draw the bucket and
+            // all drops
+            batch.begin();
+            batch.draw(bucketImage, bucket.x, bucket.y);
+            for (Rectangle raindrop : raindrops) {
+                batch.draw(dropImage, raindrop.x, raindrop.y);
+            }
         /*
         font.draw(batch, "Hello World!", 400, 240);
         font.getData().setScale(5f);
          */
-        font2.draw(batch, word, 400, 240);
-        batch.end();
+            font2.draw(batch, word, 400, 240);
+            batch.end();
 
 
-        // process user input
-        //word = "Hello";
-        if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-            bucket.x = touchPos.x - 64 / 2;
-        }
-        if (Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 500 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 500 * Gdx.graphics.getDeltaTime();
-
-        // make sure the bucket stays within the screen bounds
-        if (bucket.x < 0) bucket.x = 0;
-        if (bucket.x > 800 - 64) bucket.x = 800 - 64;
-
-        // check if we need to create a new raindrop
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
-
-        // move the raindrops, remove any that are beneath the bottom edge of
-        // the screen or that hit the bucket. In the latter case we play back
-        // a sound effect as well.
-        for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
-            Rectangle raindrop = iter.next();
-            raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if (raindrop.y + 64 < 0) {
-                iter.remove();
-                paused = true;
+            // process user input
+            //word = "Hello";
+            if (Gdx.input.isTouched()) {
+                Vector3 touchPos = new Vector3();
+                touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(touchPos);
+                bucket.x = touchPos.x - 64 / 2;
             }
-            if (raindrop.overlaps(bucket)) {
-                //wordTime = TimeUtils.nanoTime();
-                //word = "Bruh";
-                dropSound.play();
-                iter.remove();
-                score += 1;
-                word = "" + score;
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) bucket.x -= 500 * Gdx.graphics.getDeltaTime();
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) bucket.x += 500 * Gdx.graphics.getDeltaTime();
+
+            // make sure the bucket stays within the screen bounds
+            if (bucket.x < 0) bucket.x = 0;
+            if (bucket.x > 800 - 64) bucket.x = 800 - 64;
+
+            // check if we need to create a new raindrop
+            if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
+
+            // move the raindrops, remove any that are beneath the bottom edge of
+            // the screen or that hit the bucket. In the latter case we play back
+            // a sound effect as well.
+            for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
+                Rectangle raindrop = iter.next();
+                raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
+                if (raindrop.y + 64 < 0) {
+                    iter.remove();
+                    paused = true;
+                    break;
+                }
+                if (raindrop.overlaps(bucket)) {
+                    //wordTime = TimeUtils.nanoTime();
+                    //word = "Bruh";
+                    dropSound.play();
+                    iter.remove();
+                    score += 1;
+                    word = "" + score;
+                }
             }
-        }
         /*
         if (TimeUtils.nanoTime() - wordTime > 100000000) {
             word = "Hello";
         }
         */
-        if(!paused) {
-            Gdx.graphics.requestRendering();
         }
     }
+
+
 
     @Override
     public void dispose() {
