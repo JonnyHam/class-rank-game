@@ -118,6 +118,7 @@ public class Drop extends ApplicationAdapter {
             for (Rectangle raindrop : raindrops) {
                 batch.draw(dropImage, raindrop.x, raindrop.y);
             }
+
         /*
         font.draw(batch, "Hello World!", 400, 240);
         font.getData().setScale(5f);
@@ -125,6 +126,10 @@ public class Drop extends ApplicationAdapter {
             font2.draw(batch, word, 400, 240);
             batch.end();
 
+
+            if(paused) {
+                System.out.println("paused");
+            }
 
             // process user input
             //word = "Hello";
