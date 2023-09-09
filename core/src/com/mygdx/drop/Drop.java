@@ -3,6 +3,7 @@ package com.mygdx.drop;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.Timer;
+import java.io.*;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -35,23 +36,24 @@ public class Drop extends ApplicationAdapter {
     private BitmapFont font2;
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     //private String word = "Hello";
     private String word = "0";
+    private String endGameWord = "";
     private int score = 0;
+    private int highScore = 0;
     //private long wordTime;
     @Override
     public void create() {
 
-        //for pausing and resuming
-        Gdx.graphics.setContinuousRendering(false);
-        Gdx.graphics.requestRendering();
-
         // load the text
-        font = new BitmapFont();
         generator = new FreeTypeFontGenerator(Gdx.files.internal("arial.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 50;
-        font2 = generator.generateFont(parameter);
+        font = generator.generateFont(parameter);
+        parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter2.size = 75;
+        font2 = generator.generateFont(parameter2);
 
         // load the images for the droplet and the bucket, 64x64 pixels each
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
@@ -96,43 +98,41 @@ public class Drop extends ApplicationAdapter {
 
     @Override
     public void render() {
-        if(!paused) {
-            Gdx.graphics.requestRendering();
-            // clear the screen with a dark blue color. The
-            // arguments to clear are the red, green
-            // blue and alpha component in the range [0,1]
-            // of the color to be used to clear the screen.
-            ScreenUtils.clear(0, 0, 0.2f, 1);
+        if (!paused) {
+            motion(true);
+        } else {
+            motion(false);
+        }
+        //Gdx.graphics.requestRendering();
+        // clear the screen with a dark blue color. The
+        // arguments to clear are the red, green
+        // blue and alpha component in the range [0,1]
+        // of the color to be used to clear the screen.
+        ScreenUtils.clear(0, 0, 0.2f, 1);
 
-            // tell the camera to update its matrices.
-            camera.update();
+        // tell the camera to update its matrices.
+        camera.update();
 
-            // tell the SpriteBatch to render in the
-            // coordinate system specified by the camera.
-            batch.setProjectionMatrix(camera.combined);
+        // tell the SpriteBatch to render in the
+        // coordinate system specified by the camera.
+        batch.setProjectionMatrix(camera.combined);
 
-            // begin a new batch and draw the bucket and
-            // all drops
-            batch.begin();
-            batch.draw(bucketImage, bucket.x, bucket.y);
-            for (Rectangle raindrop : raindrops) {
-                batch.draw(dropImage, raindrop.x, raindrop.y);
-            }
+        // begin a new batch and draw the bucket and
+        // all drops
+        batch.begin();
+        batch.draw(bucketImage, bucket.x, bucket.y);
+        for (Rectangle raindrop : raindrops) {
+            batch.draw(dropImage, raindrop.x, raindrop.y);
+        }
 
-        /*
-        font.draw(batch, "Hello World!", 400, 240);
-        font.getData().setScale(5f);
-         */
-            font2.draw(batch, word, 400, 240);
-            batch.end();
+        font.draw(batch, word, 400, 240);
+        font2.draw(batch, endGameWord, 50, 440);
+        batch.end();
+    }
 
 
-            if(paused) {
-                System.out.println("paused");
-            }
-
-            // process user input
-            //word = "Hello";
+    public void motion (boolean isPlaying) {
+        if (isPlaying) {
             if (Gdx.input.isTouched()) {
                 Vector3 touchPos = new Vector3();
                 touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -146,38 +146,29 @@ public class Drop extends ApplicationAdapter {
             if (bucket.x < 0) bucket.x = 0;
             if (bucket.x > 800 - 64) bucket.x = 800 - 64;
 
-            // check if we need to create a new raindrop
             if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop();
 
-            // move the raindrops, remove any that are beneath the bottom edge of
-            // the screen or that hit the bucket. In the latter case we play back
-            // a sound effect as well.
+
             for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
                 Rectangle raindrop = iter.next();
                 raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
                 if (raindrop.y + 64 < 0) {
                     iter.remove();
                     paused = true;
+                    //word = "Gameover! Score: " + score;
+                    word = "";
+                    endGameWord = "Game over! Score: " + score + "\n" + "High score: ";
                     break;
                 }
                 if (raindrop.overlaps(bucket)) {
-                    //wordTime = TimeUtils.nanoTime();
-                    //word = "Bruh";
                     dropSound.play();
                     iter.remove();
                     score += 1;
                     word = "" + score;
                 }
             }
-        /*
-        if (TimeUtils.nanoTime() - wordTime > 100000000) {
-            word = "Hello";
-        }
-        */
         }
     }
-
-
 
     @Override
     public void dispose() {
@@ -189,6 +180,6 @@ public class Drop extends ApplicationAdapter {
         batch.dispose();
         //font.dispose();
         generator.dispose();
-        font2.dispose();
+        font.dispose();
     }
 }
