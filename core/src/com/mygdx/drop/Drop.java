@@ -193,7 +193,7 @@ public class Drop extends ApplicationAdapter {
         }
         catch (FileNotFoundException fe)
         {
-            System.out.println("File not found");
+
         }
 
         // read from FileReader till the end of file
