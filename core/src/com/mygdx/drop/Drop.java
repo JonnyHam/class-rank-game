@@ -1,9 +1,10 @@
 package com.mygdx.drop;
 
-import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
-import java.util.Timer;
-import java.io.*;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -41,7 +42,7 @@ public class Drop extends ApplicationAdapter {
     private String word = "0";
     private String endGameWord = "";
     private int score = 0;
-    private int highScore = 0;
+    private int highScore = score;
     //private long wordTime;
     @Override
     public void create() {
@@ -99,9 +100,17 @@ public class Drop extends ApplicationAdapter {
     @Override
     public void render() {
         if (!paused) {
-            motion(true);
+            try {
+                motion(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            motion(false);
+            try {
+                motion(false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         //Gdx.graphics.requestRendering();
         // clear the screen with a dark blue color. The
@@ -131,7 +140,7 @@ public class Drop extends ApplicationAdapter {
     }
 
 
-    public void motion (boolean isPlaying) {
+    public void motion (boolean isPlaying) throws IOException {
         if (isPlaying) {
             if (Gdx.input.isTouched()) {
                 Vector3 touchPos = new Vector3();
@@ -157,7 +166,8 @@ public class Drop extends ApplicationAdapter {
                     paused = true;
                     //word = "Gameover! Score: " + score;
                     word = "";
-                    endGameWord = "Game over! Score: " + score + "\n" + "High score: ";
+                    setHighScore(score);
+                    endGameWord = "Game over! Score: " + score + "\n" + "High score: " + highScore;
                     break;
                 }
                 if (raindrop.overlaps(bucket)) {
@@ -167,6 +177,45 @@ public class Drop extends ApplicationAdapter {
                     word = "" + score;
                 }
             }
+        }
+    }
+
+    public void setHighScore(int score) throws IOException {
+        // variable declaration
+        int ch;
+        String highScoreString = "";
+
+        // check if File exists or not
+        FileReader fr=null;
+        try
+        {
+            fr = new FileReader("C:\\Users\\Jonathan Kim\\Documents\\class-rank-game\\assets\\High_Score_Tracker");
+        }
+        catch (FileNotFoundException fe)
+        {
+            System.out.println("File not found");
+        }
+
+        // read from FileReader till the end of file
+        while ((ch=fr.read())!=-1)
+            highScoreString += (char)ch;
+        // close the file
+        fr.close();
+
+        highScore = Integer.parseInt(highScoreString, 10);
+
+        if (score > highScore) {
+            highScore = score;
+            FileWriter fw=new FileWriter("C:\\Users\\Jonathan Kim\\Documents\\class-rank-game\\assets\\High_Score_Tracker");
+
+            // read character wise from string and write
+            // into FileWriter
+            for (int i = 0; i < Integer.toString(highScore).length(); i++)
+                fw.write(Integer.toString(highScore).charAt(i));
+            //close the file
+            fw.close();
+        } else {
+
         }
     }
 
