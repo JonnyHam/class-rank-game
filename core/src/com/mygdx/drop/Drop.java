@@ -137,6 +137,13 @@ public class Drop extends ApplicationAdapter {
         font.draw(batch, word, 400, 240);
         font2.draw(batch, endGameWord, 50, 440);
         batch.end();
+
+        if ((Gdx.input.isKeyPressed(Keys.SPACE)) && (paused == true)) {
+            paused = false;
+            score = 0;
+            endGameWord = "";
+            word = "" + score;
+        }
     }
 
 
