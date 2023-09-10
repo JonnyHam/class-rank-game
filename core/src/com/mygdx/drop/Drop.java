@@ -143,6 +143,10 @@ public class Drop extends ApplicationAdapter {
             score = 0;
             endGameWord = "";
             word = "" + score;
+            bucket.x = 800 / 2 - 64 / 2;
+            bucket.y = 20;
+            raindrops = new Array<Rectangle>();
+            spawnRaindrop();
         }
     }
 
