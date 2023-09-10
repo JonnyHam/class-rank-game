@@ -214,8 +214,6 @@ public class Drop extends ApplicationAdapter {
                 fw.write(Integer.toString(highScore).charAt(i));
             //close the file
             fw.close();
-        } else {
-
         }
     }
 
