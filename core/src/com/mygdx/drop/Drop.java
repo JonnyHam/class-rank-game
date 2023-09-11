@@ -178,7 +178,7 @@ public class Drop extends ApplicationAdapter {
                     //word = "Gameover! Score: " + score;
                     word = "";
                     setHighScore(score);
-                    endGameWord = "Game over! Score: " + score + "\n" + "High score: " + highScore;
+                    endGameWord = "Game over!" + "\n" + "Score: " + score + "\n" + "High score: " + highScore;
                     break;
                 }
                 if (raindrop.overlaps(bucket)) {
@@ -200,7 +200,7 @@ public class Drop extends ApplicationAdapter {
         FileReader fr=null;
         try
         {
-            fr = new FileReader("C:\\Users\\Jonathan Kim\\Documents\\class-rank-game\\assets\\High_Score_Tracker");
+            fr = new FileReader("assets\\High_Score_Tracker");
         }
         catch (FileNotFoundException fe)
         {
@@ -217,7 +217,7 @@ public class Drop extends ApplicationAdapter {
 
         if (score > highScore) {
             highScore = score;
-            FileWriter fw=new FileWriter("C:\\Users\\Jonathan Kim\\Documents\\class-rank-game\\assets\\High_Score_Tracker");
+            FileWriter fw=new FileWriter("assets\\High_Score_Tracker");
 
             // read character wise from string and write
             // into FileWriter
