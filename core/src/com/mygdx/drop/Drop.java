@@ -178,7 +178,7 @@ public class Drop extends ApplicationAdapter {
                     //word = "Gameover! Score: " + score;
                     word = "";
                     setHighScore(score);
-                    endGameWord = "Game over! Score: " + score + "\n" + "High score: " + highScore;
+                    endGameWord = "Game over!" + "\n" + "Score: " + score + "\n" + "High score: " + highScore;
                     break;
                 }
                 if (raindrop.overlaps(bucket)) {
