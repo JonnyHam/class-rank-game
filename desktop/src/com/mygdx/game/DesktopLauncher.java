@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("class-rank-game");
-		//new Lwjgl3Application(new MyGdxGame(), config);
-		new Lwjgl3Application(new Drop(), config);
+		new Lwjgl3Application(new ClassRankGame(), config);
+		//new Lwjgl3Application(new Drop(), config);
 	}
 }
