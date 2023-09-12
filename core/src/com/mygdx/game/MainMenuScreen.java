@@ -4,11 +4,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MainMenuScreen implements Screen {
-    final game;
+    final ClassRankGame game;
 
     OrthographicCamera camera;
 
-    public MainMenuScreen(final game game) {
+    public MainMenuScreen(final ClassRankGame game) {
         this.game = game;
 
         camera = new OrthographicCamera();
