@@ -21,6 +21,7 @@ public class MainMenuScreen implements Screen {
     private BitmapFont gameTitle;
     private int font2x = 100;
     private int font2y = 100;
+    //private Coordinates coordinates;
 
     public MainMenuScreen(final ClassRankGame game) {
         this.game = game;
@@ -35,6 +36,7 @@ public class MainMenuScreen implements Screen {
         parameter2.size = 30;
         coordinates = generator.generateFont(parameter);
         gameTitle = generator.generateFont(parameter2);
+        //coordinates = new Coordinates(game, camera);
     }
 
 
@@ -54,7 +56,9 @@ public class MainMenuScreen implements Screen {
         coordinates.draw(game.batch, "["+font2x+","+font2y+"]", font2x, font2y);
         gameTitle.setColor(Color.BLACK);
         gameTitle.draw(game.batch, "Welcome to the Class Rank Game", 149, 429);
+        //coordinates.getCoordinateText();
         game.batch.end();
+
 
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
@@ -63,6 +67,7 @@ public class MainMenuScreen implements Screen {
             font2x = (int)touchPos.x;
             font2y = (int)touchPos.y;
         }
+
 
 
     }
@@ -90,7 +95,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         game.batch.dispose();
-        coordinates.dispose();
+        //coordinates.dispose();
         generator.dispose();
     }
 }
