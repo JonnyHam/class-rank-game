@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,7 +56,7 @@ public class MainMenuScreen implements Screen {
         coordinates.setColor(Color.BLACK);
         coordinates.draw(game.batch, "["+font2x+","+font2y+"]", font2x, font2y);
         gameTitle.setColor(Color.BLACK);
-        gameTitle.draw(game.batch, "Welcome to the Class Rank Game", 149, 429);
+        gameTitle.draw(game.batch, "Welcome to the Class Rank Game" + "\n\n\n" + "Click anywhere to begin!", 149, 429);
         //coordinates.getCoordinateText();
         game.batch.end();
 
@@ -66,6 +67,10 @@ public class MainMenuScreen implements Screen {
             camera.unproject(touchPos);
             font2x = (int)touchPos.x;
             font2y = (int)touchPos.y;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            //this.setScreen(new GameScreen(this));
         }
 
 
