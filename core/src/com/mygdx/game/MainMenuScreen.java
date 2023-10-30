@@ -56,7 +56,7 @@ public class MainMenuScreen implements Screen {
         coordinates.setColor(Color.BLACK);
         coordinates.draw(game.batch, "["+font2x+","+font2y+"]", font2x, font2y);
         gameTitle.setColor(Color.BLACK);
-        gameTitle.draw(game.batch, "Welcome to the Class Rank Game" + "\n\n\n" + "Click anywhere to begin!", 149, 429);
+        gameTitle.draw(game.batch, "Welcome to the Class Rank Game" + "\n\n\n" + "Press Space to Begin!", 149, 429);
         //coordinates.getCoordinateText();
         game.batch.end();
 
@@ -70,7 +70,8 @@ public class MainMenuScreen implements Screen {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            //this.setScreen(new GameScreen(this));
+            game.setScreen(new GameScreen());
+            dispose();
         }
 
 
