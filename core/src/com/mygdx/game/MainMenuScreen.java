@@ -101,7 +101,9 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         game.batch.dispose();
-        //coordinates.dispose();
+        coordinates.dispose();
         generator.dispose();
+        gameTitle.dispose();
+
     }
 }
