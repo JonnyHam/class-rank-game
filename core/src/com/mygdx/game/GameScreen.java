@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         gameScreenTitle.setColor(Color.BLACK);
-        gameScreenTitle.draw(game.batch, "Game Screen", 149, 249);
+        gameScreenTitle.draw(game.batch, "Game Screen", 206, 453);
         game.batch.end();
 
     }
