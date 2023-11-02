@@ -14,6 +14,8 @@ public class GameScreen implements Screen {
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont gameScreenTitle;
+    ShapeDrawer drawer = new ShapeDrawer(batch, region);
+
     public GameScreen(final ClassRankGame game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -38,6 +40,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         gameScreenTitle.setColor(Color.BLACK);
         gameScreenTitle.draw(game.batch, "Game Screen", 206, 453);
+
         game.batch.end();
 
     }
