@@ -19,7 +19,6 @@ public class GameScreen implements Screen {
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont gameScreenTitle;
-    //private PolygonSpriteBatch polygonSpriteBatch;
     private Texture texture;
     private TextureRegion region;
     private ShapeDrawer shapeDrawer;
@@ -35,7 +34,6 @@ public class GameScreen implements Screen {
         parameter.size = 40;
         gameScreenTitle = generator.generateFont(parameter);
 
-        //polygonSpriteBatch = new PolygonSpriteBatch();
         texture = new Texture(Gdx.files.internal("white_pixel.png"));
         region = new TextureRegion(texture);
         shapeDrawer = new ShapeDrawer(game.batch, region);
@@ -48,7 +46,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
         ScreenUtils.clear(1, 1, 1, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -56,9 +53,9 @@ public class GameScreen implements Screen {
         game.batch.begin();
         gameScreenTitle.setColor(Color.BLACK);
         gameScreenTitle.draw(game.batch, "Game Screen", 206, 453);
-        //polygonSpriteBatch.draw(texture, 50, 50);
-        shapeDrawer.setColor(Color.BLUE);
+        shapeDrawer.setColor(Color.BLACK);
         shapeDrawer.filledCircle(circleX, circleY, 100);
+        shapeDrawer.rectangle(400, 100, 200, 100, 3);
 
         game.batch.end();
 
@@ -90,7 +87,6 @@ public class GameScreen implements Screen {
         game.batch.dispose();
         generator.dispose();
         gameScreenTitle.dispose();
-        //polygonSpriteBatch.dispose();
         texture.dispose();
     }
 }
