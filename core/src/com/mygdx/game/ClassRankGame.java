@@ -14,6 +14,7 @@ public class ClassRankGame extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont(); // use libGDX's default Arial font
 		this.setScreen(new MainMenuScreen(this));
+		//this.setScreen(new GameScreen(this));
 	}
 
 	public void render() {

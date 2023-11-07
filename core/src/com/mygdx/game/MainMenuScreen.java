@@ -104,6 +104,5 @@ public class MainMenuScreen implements Screen {
         coordinates.dispose();
         generator.dispose();
         gameTitle.dispose();
-
     }
 }
