@@ -22,6 +22,7 @@ public class GameScreen implements Screen {
     private Texture texture;
     private TextureRegion region;
     private ShapeDrawer shapeDrawer;
+    private ShapeDrawer shapeDrawer2;
     private int circleX = 100;
     private int circleY = 100;
 
@@ -37,6 +38,7 @@ public class GameScreen implements Screen {
         texture = new Texture(Gdx.files.internal("white_pixel.png"));
         region = new TextureRegion(texture);
         shapeDrawer = new ShapeDrawer(game.batch, region);
+        shapeDrawer2 = new ShapeDrawer(game.batch, region);
     }
 
     @Override
@@ -53,8 +55,12 @@ public class GameScreen implements Screen {
         game.batch.begin();
         gameScreenTitle.setColor(Color.BLACK);
         gameScreenTitle.draw(game.batch, "Game Screen", 206, 453);
+
         shapeDrawer.setColor(Color.BLACK);
         shapeDrawer.filledCircle(circleX, circleY, 100);
+
+        shapeDrawer2.setColor(Color.RED);
+        shapeDrawer2.filledRectangle(400, 100, 200, 100);
         shapeDrawer.rectangle(400, 100, 200, 100, 3);
 
         game.batch.end();
