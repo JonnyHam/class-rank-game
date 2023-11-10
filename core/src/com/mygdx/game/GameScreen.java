@@ -3,15 +3,15 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+import java.util.ArrayList;
 
 public class GameScreen implements Screen {
     OrthographicCamera camera;
@@ -21,10 +21,9 @@ public class GameScreen implements Screen {
     private BitmapFont gameScreenTitle;
     private Texture texture;
     private TextureRegion region;
-    private ShapeDrawer shapeDrawer;
-    private ShapeDrawer shapeDrawer2;
-    private int circleX = 100;
-    private int circleY = 100;
+    private ArrayList<ShapeDrawer> rectangleOutline;
+    private ArrayList<ShapeDrawer> rectangle;
+    private ArrayList<Integer[]> rectPositions;
 
     public GameScreen(final ClassRankGame game) {
         this.game = game;
@@ -37,8 +36,16 @@ public class GameScreen implements Screen {
 
         texture = new Texture(Gdx.files.internal("white_pixel.png"));
         region = new TextureRegion(texture);
-        shapeDrawer = new ShapeDrawer(game.batch, region);
-        shapeDrawer2 = new ShapeDrawer(game.batch, region);
+        rectangle = new ArrayList<ShapeDrawer>();
+        rectangleOutline = new ArrayList<ShapeDrawer>();
+
+        rectPositions = new ArrayList<Integer[]>();
+
+        for (int i = 0; i < 4; i++) {
+            rectangle.add(new ShapeDrawer(game.batch, region));
+            rectangleOutline.add(new ShapeDrawer(game.batch, region));
+            rectPositions.add(new Integer[]{20+(i*155), 20});
+        }
     }
 
     @Override
@@ -56,15 +63,20 @@ public class GameScreen implements Screen {
         gameScreenTitle.setColor(Color.BLACK);
         gameScreenTitle.draw(game.batch, "Game Screen", 206, 453);
 
-        shapeDrawer.setColor(Color.BLACK);
-        shapeDrawer.filledCircle(circleX, circleY, 100);
-
-        shapeDrawer2.setColor(Color.RED);
-        shapeDrawer2.filledRectangle(400, 100, 200, 100);
-        shapeDrawer.rectangle(400, 100, 200, 100, 3);
+        for (int i = 0; i < rectPositions.size(); i++) {
+            rectangleOutline.get(i).setColor(Color.BLACK);
+            rectangle.get(i).setColor(Color.GOLDENROD);
+            rectangle.get(i).filledRectangle(rectPositions.get(i)[0], rectPositions.get(i)[1], 150, 75);
+            rectangleOutline.get(i).rectangle(rectPositions.get(i)[0], rectPositions.get(i)[1], 150, 75, 3);
+        }
 
         game.batch.end();
 
+        for (int i = 0; i < rectPositions.size(); i++) {
+            if (Gdx.input.isTouched()) {
+
+            }
+        }
 
     }
 
